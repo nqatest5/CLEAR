@@ -16,3 +16,6 @@ pip install --upgrade genai
 
 pip install google-genai
 
+
+
+For Python 3.12+ you must install Rust (https://rustup.rs/)
