@@ -2,6 +2,8 @@ CLEAR
 
 (C)ategorization via (L)abel (E)xtraction and (A)I (R)efinement
 
+**Linux and Windows v1.0.0v-beta released
+
 Installation:
 
 (Windows)
