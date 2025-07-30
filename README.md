@@ -1,4 +1,4 @@
-CLEAR | (C)ategorization via (L)abel (E)xtraction and (A)I (R)efinement
+<img width="800" height="253" alt="CLEAR banner" src="https://github.com/user-attachments/assets/0ff074a9-0989-460c-9e19-ba3a9f9937e8" />
 
 **Linux and Windows v1.0.0v-beta released
 
