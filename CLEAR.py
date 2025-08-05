@@ -307,14 +307,18 @@ def start_file_selection():
 # --- GUI Setup ---
 root = tk.Tk()
 root.title("📦 CLEAR")
-root.geometry("600x450")  # Increased height to accommodate log area
+root.geometry("600x500")  # Increased height to accommodate log area
 root.resizable(False, False)
 
 frame = tk.Frame(root, padx=20, pady=20)
 frame.pack(expand=True, fill='both')
 
 title_label = tk.Label(frame, text="📦 Categorization via Label Extraction and AI Refinement", font=('Helvetica', 14))
-title_label.pack(pady=(0, 12))
+title_label.pack(pady=(0, 0))
+
+# --- Credits and Contact ---
+credit_label = tk.Label(frame, text="Program by Nathan Mercer. Contact: n.mercer@samsung.com", font=('Helvetica',7), fg="gray")
+credit_label.pack(pady=(0,12))
 
 subtitle_label = tk.Label(frame, text="Please select package_list.csv file or use existing app_categories.csv",
                           font=('Helvetica', 9))
@@ -334,7 +338,7 @@ start_button = tk.Button(frame, text="📂 Choose Input File & Save Location", c
 start_button.pack(pady=6)
 
 status_label = tk.Label(frame, text="Waiting for file selection...", font=('Helvetica', 10), fg="gray")
-status_label.pack(pady=(14, 10))
+status_label.pack(pady=(10, 10))
 
 # --- Log Area for Terminal Messages ---
 log_frame = tk.Frame(frame)
@@ -349,6 +353,7 @@ log_text.pack(side='left', fill='both', expand=True)
 scrollbar = tk.Scrollbar(log_frame, orient='vertical', command=log_text.yview)
 scrollbar.pack(side='right', fill='y')
 log_text.config(yscrollcommand=scrollbar.set)
+
 
 # Redirect print statements to the log_text widget
 sys.stdout = StdoutRedirector(log_text)
