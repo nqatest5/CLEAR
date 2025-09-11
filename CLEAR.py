@@ -61,9 +61,9 @@ def save_error_log():
 
 def compare_csv_files(app_csv_path, gemini_csv_path, differences_file_path):
     """
-    Compare the 'Package Name' column of app_categories.csv and gemini_categories.csv.
-    Save any differences to a new CSV file.
-    """
+	Compare the 'Package Name' column of app_categories.csv and gemini_categories.csv.
+	Save any differences to a new CSV file.
+	"""
     try:
         # Read only the 'Package Name' column from both files
         df_app = pd.read_csv(app_csv_path)[['Package Name']]
@@ -130,7 +130,7 @@ def process_file(input_path, output_path, skip_scraper=False):
                 except Exception:
                     results.append({
                         'Package Name': package,
-                        'Category': ''
+                        'Category': 'App does not exist in Play Store'
                     })
                     status_label.config(text=f"{packagecount + 1}/{len(package_names)} - {package} ❌")
                 time.sleep(0.1)
@@ -161,7 +161,29 @@ def process_file(input_path, output_path, skip_scraper=False):
                 model="gemini-2.5-flash",
                 contents=[
                     uploaded_file,
-                    'You are given the contents of a CSV file. Your task is to extract every value from the second column, starting after the header row. Use only the data provided—do not search the web or use external knowledge. Your task is to: 1. Output a list with exactly all the values from the second column in the same order as in the file. 2. For each value, assign a category based only on the following list: MUSIC AND AUDIO, VIDEO PLAYERS, ENTERTAINMENT, PHOTOGRAPHY, BEAUTY, GAME, SOCIAL, PRODUCTIVITY, LIFESTYLE, MEDICAL, PERSONALIZATION, TOOLS, SPORTS, EDUCATION, FINANCE, BUSINESS, ART AND DESIGN, COMMUNICATION, BOOKS AND REFERENCE, COMICS, LIBRARIES AND DEMO, NEWS AND MAGAZINES, MAPS AND NAVIGATION, WEATHER, FOOD AND DRINK, TRAVEL AND LOCAL, EVENTS, HEALTH AND FITNESS, AUTO AND VEHICLES, PARENTING, HOUSE AND HOME, SHOPPING, DATING. If a category is missing or empty, infer a category If any category given is Puzzle, Casual, Strategy, Action, Adventure, Arcade, Board, Card, Casino, Racing, Role Playing, Simulation, or Word categorize it as GAME. Rules for output format: Print headers first: Package Name, Category. Then print all values from the second column, each followed by its category. Preserve the original order of package names. Format: [package_name],[CATEGORY] on each line (no brackets). Only alpha-numeric characters are allowed in the output (no special characters like &). Do not change or alter any package name in any way. Do not add extra commentary or explanation-just the data. Ensure you account for exactly all package names. If any are missing, repeat the task correctly. Output must be complete, ordered, and clean.'
+                    'You are given the contents of a CSV file. Your task is to extract every value from the second column, '
+                    'starting after the header row. Use only the data provided—do not search the web or use external knowledge. '
+                    'Your task is to: '
+                    '1. Output a list with exactly all the values from the second column in the same order as in the file. '
+                    '2. For each value, assign a category based only on the following list: '
+                    'MUSIC AND AUDIO, VIDEO PLAYERS, ENTERTAINMENT, PHOTOGRAPHY, BEAUTY, GAME, SOCIAL, '
+                    'PRODUCTIVITY, LIFESTYLE, MEDICAL, PERSONALIZATION, TOOLS, SPORTS, EDUCATION, FINANCE, BUSINESS, '
+                    'ART AND DESIGN, COMMUNICATION, BOOKS AND REFERENCE, COMICS, LIBRARIES AND DEMO, '
+                    'NEWS AND MAGAZINES, MAPS AND NAVIGATION, WEATHER, FOOD AND DRINK, TRAVEL AND LOCAL, '
+                    'EVENTS, HEALTH AND FITNESS, AUTO AND VEHICLES, PARENTING, HOUSE AND HOME, SHOPPING, DATING. '
+                    'If a category is missing or empty, infer a category. '
+                    'If the package is marked App does not exist in Play Store, then leave it as-is. '
+                    'If any category given is Puzzle, Casual, Strategy, Action, Adventure, Arcade, Board, Card, '
+                    'Casino, Racing, Role Playing, Simulation, or Word categorize it as GAME. '
+                    'Rules for output format: '
+                    'Print headers first: Package Name, Category. '
+                    'Then print all values from the second column, each followed by its category. '
+                    'Preserve the original order of package names. '
+                    'Format: [package_name],[CATEGORY] on each line (no brackets). '
+                    'Only alpha-numeric characters are allowed in the output (no special characters like &). '
+                    'Do not change or alter any package name in any way. Do not add extra commentary or explanation-just the data. '
+                    'Ensure you account for exactly all package names. If any are missing, repeat the task correctly. '
+                    'Output must be complete, ordered, and clean.'
                 ]
             )
             print(f"\n")
@@ -224,7 +246,8 @@ def process_file(input_path, output_path, skip_scraper=False):
                             df_gemini.to_csv(csv_path, index=False, lineterminator='\n')
                             print(
                                 f"✅ Updated {csv_path}: Added {len(app_only)} UNCATEGORIZED packages, removed {len(gemini_only)} Gemini-only packages.")
-                            print(f"‼️ If more than 10 apps were added as UNCATEGORIZED, please re-run using existing app_categories.csv file ‼️")
+                            print(
+                                f"‼️ If more than 10 apps were added as UNCATEGORIZED, please re-run using existing app_categories.csv file ‼️")
                         except Exception as update_err:
                             error_message = f"Failed to update gemini_categories.csv: {update_err}"
                             log_error(error_message)
@@ -317,8 +340,9 @@ title_label = tk.Label(frame, text="📦 Categorization via Label Extraction and
 title_label.pack(pady=(0, 0))
 
 # --- Credits and Contact ---
-credit_label = tk.Label(frame, text="Program by Nathan Mercer. Contact: n.mercer@samsung.com", font=('Helvetica',7), fg="gray")
-credit_label.pack(pady=(0,12))
+credit_label = tk.Label(frame, text="Program by Nathan Mercer. Contact: n.mercer@samsung.com", font=('Helvetica', 7),
+                        fg="gray")
+credit_label.pack(pady=(0, 12))
 
 subtitle_label = tk.Label(frame, text="Please select package_list.csv file or use existing app_categories.csv",
                           font=('Helvetica', 9))
@@ -353,7 +377,6 @@ log_text.pack(side='left', fill='both', expand=True)
 scrollbar = tk.Scrollbar(log_frame, orient='vertical', command=log_text.yview)
 scrollbar.pack(side='right', fill='y')
 log_text.config(yscrollcommand=scrollbar.set)
-
 
 # Redirect print statements to the log_text widget
 sys.stdout = StdoutRedirector(log_text)
